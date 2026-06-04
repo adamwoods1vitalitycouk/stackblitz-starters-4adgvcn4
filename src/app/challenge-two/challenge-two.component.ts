@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { HintsService } from '../hints.service';
 
 @Component({
   selector: 'app-challenge-two',
@@ -178,14 +179,11 @@ export class ChallengeTwoComponent implements OnInit {
   form!: FormGroup;
   formValues: string = '';
   currentHintLevel = 0;
+  private hints: string[] = [];
 
-  private hints = [
-    'Open the browser console (F12). What error do you see?',
-    'Compare the template: you have formControlName="name" and formControlName="email". What does the FormGroup in ngOnInit() have?',
-    'Every formControlName in the template needs a matching field in the FormGroup. Add email: [\'\'] to the fb.group() definition.'
-  ];
-
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private hintsService: HintsService) {
+    this.hints = this.hintsService.getHints('challenge-two');
+  }
 
   ngOnInit() {
     this.form = this.fb.group({

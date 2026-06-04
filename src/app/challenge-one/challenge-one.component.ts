@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HintsService } from '../hints.service';
 
 @Component({
   selector: 'app-challenge-one',
@@ -131,12 +132,11 @@ import { CommonModule } from '@angular/common';
 export class ChallengeOneComponent {
   count = 0;
   currentHintLevel = 0;
+  private hints: string[] = [];
 
-  private hints = [
-    'Is the button wired to a click event? Check if it has (click)="..." in the template.',
-    'Does a method exist in the component class that increments the count?',
-    'You need to create a method (e.g., increment()) that does this.count++ and wire the button to call it with (click)="increment()"'
-  ];
+  constructor(private hintsService: HintsService) {
+    this.hints = this.hintsService.getHints('challenge-one');
+  }
 
   showNextHint() {
     if (this.currentHintLevel < this.hints.length) {

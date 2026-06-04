@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HintsService } from '../hints.service';
 
 @Component({
   selector: 'app-challenge-three',
@@ -165,12 +166,11 @@ import { CommonModule } from '@angular/common';
 export class ChallengeThreeComponent {
   isVisible = false;
   currentHintLevel = 0;
+  private hints: string[] = [];
 
-  private hints = [
-    'What does "toggle" mean? It should switch between two states (on/off, true/false).',
-    'Look at the toggle() method. Does it actually toggle, or does it always set to the same value?',
-    'Use the ! operator to flip the boolean: this.isVisible = !this.isVisible instead of always setting it to true.'
-  ];
+  constructor(private hintsService: HintsService) {
+    this.hints = this.hintsService.getHints('challenge-three');
+  }
 
   toggle() {
     this.isVisible = true;
