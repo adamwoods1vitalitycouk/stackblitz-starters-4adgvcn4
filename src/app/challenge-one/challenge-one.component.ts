@@ -31,10 +31,6 @@ import { HintsService } from '../hints.service';
             }
           </div>
         }
-
-        <p class="hint-file-link">
-          Or open <code>src/app/challenge-one/HINT.md</code> to see all hints
-        </p>
       </div>
     </div>
   `,
@@ -114,18 +110,6 @@ import { HintsService } from '../hints.service';
       font-size: 14px;
       color: #004085;
       line-height: 1.6;
-    }
-    .hint-file-link {
-      margin-top: 15px;
-      font-size: 12px;
-      color: #666;
-      text-align: center;
-    }
-    .hint-file-link code {
-      background: rgba(0,0,0,0.1);
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-family: monospace;
     }
   `]
 })
