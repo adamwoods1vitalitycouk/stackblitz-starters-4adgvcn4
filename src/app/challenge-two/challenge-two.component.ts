@@ -190,6 +190,7 @@ export class ChallengeTwoComponent implements OnInit {
   }
 
   getHintButtonText(): string {
+    if (!this.hints || this.hints.length === 0) return '💡 Get Hint';
     if (this.currentHintLevel === 0) return '💡 Get Hint';
     if (this.currentHintLevel < this.hints.length) return '💡 Get Another Hint';
     return '💡 No More Hints';
