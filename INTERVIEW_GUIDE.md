@@ -1,145 +1,219 @@
-# Angular Interview Challenges - Guide
+# Angular Interview Challenges - 30 Minute Guide
 
 ## Overview
-This project contains 3 progressively challenging tasks to assess Angular, TypeScript, and RxJS skills during technical interviews.
-
-## How to Use During Interview
-
-### Setup (Before the Call)
-1. Import this repo into StackBlitz: https://stackblitz.com/github/adamwoods1vitalitycouk/stackblitz-starters-4adgvcn4
-2. Share the StackBlitz URL with the candidate
-3. Have them fork it so they can edit
-4. Ask them to share their screen
-
-### Challenge Overview (45-50 minutes total)
-
-#### Challenge 1: Fix the Bugs (10 minutes) 🐛
-**Difficulty:** Easy  
-**Skills Tested:** Basic Angular syntax, TypeScript typing, template binding
-
-**What they need to fix:**
-- Template safe navigation operator (`user?.name`)
-- Property binding vs attribute binding (`[disabled]="isLoading"`)
-- Missing click handler on Save button
-- Type the `user` property (create User interface)
-
-**Success Criteria:**
-- No template errors
-- Button disables during loading
-- Save button works
-- Proper TypeScript typing
+Quick technical assessment with 3 simple, realistic bug-fix challenges to evaluate Angular fundamentals.
 
 ---
 
-#### Challenge 2: RxJS Search Implementation (20 minutes) 🔍
-**Difficulty:** Medium  
-**Skills Tested:** RxJS operators, async handling, memory management
+## Interview Structure (30 minutes)
 
-**What they need to implement:**
-- Listen to form control value changes
-- Debounce input (300ms)
-- Use `switchMap` to cancel previous requests
-- Handle loading states
-- Error handling with `catchError`
-- Proper unsubscribe with `takeUntil`
-
-**Pattern Reference:**
-This mirrors patterns used in your clt-app:
-- `post-code.component.ts` - debounce + switchMap pattern
-- `condition-details.component.ts` - search implementation
-
-**Success Criteria:**
-- Search works with debounce
-- Previous requests are cancelled
-- Loading indicator appears
-- No memory leaks (unsubscribe on destroy)
-- Type "alice" to test (should find Alice Johnson)
+| Time | Activity |
+|------|----------|
+| 0-5 min | Intro, screen share setup |
+| 5-20 min | **3 Challenges** (5 min each) |
+| 20-30 min | Discussion & questions |
 
 ---
 
-#### Challenge 3: Reactive Forms (15-20 minutes) 📝
-**Difficulty:** Medium-Hard  
-**Skills Tested:** Reactive forms, validation, custom validators
+## Setup (Before Interview)
 
-**What they need to build:**
-- Initialize FormGroup with FormBuilder
-- Add built-in validators (required, email, minLength)
-- Create custom validator (password must contain number)
-- Bind form to template with `[formGroup]` and `formControlName`
-- Show validation errors conditionally (only when touched)
-- Disable submit button when form invalid
-- Handle form submission
+1. **Import to StackBlitz:**  
+   Go to: `https://stackblitz.com/github/adamwoods1vitalitycouk/stackblitz-starters-4adgvcn4`
 
-**Success Criteria:**
-- Form validates correctly
-- Errors show only after touch
-- Custom validator works (password needs number)
-- Submit button disabled until valid
-- Success message displays on submit
+2. **Share with Candidate:**  
+   Send them the StackBlitz URL
+
+3. **Ask them to:**
+   - Fork the project (so they can edit)
+   - Share their screen
+   - Work through challenges 1 → 2 → 3
+
+---
+
+## The Challenges
+
+### ✅ Challenge 1: Broken Button (5 min)
+**Scenario:** Button doesn't increment the counter
+
+**What's broken:**
+- Button has no click handler
+- No `increment()` method exists
+
+**What they need to do:**
+```typescript
+// Add method
+increment() {
+  this.count++;
+}
+
+// Wire button: <button (click)="increment()">Add</button>
+```
+
+**Tests:** Event binding, method creation, basic Angular syntax
+
+**Success:** Clicking button increases count
+
+---
+
+### ✅ Challenge 2: Missing Form Field (5 min)
+**Scenario:** Email field shows console error
+
+**What's broken:**
+- FormGroup only has `name` field
+- Template has both `name` and `email` fields
+- Console error: `formControlName="email"` not found
+
+**What they need to do:**
+```typescript
+this.form = this.fb.group({
+  name: [''],
+  email: ['']  // Add this
+});
+```
+
+**Tests:** Reactive forms understanding, debugging console errors
+
+**Success:** No console errors, both fields work, "Show Form Values" displays both
+
+---
+
+### ✅ Challenge 3: Broken Toggle (5 min)
+**Scenario:** Toggle button only shows message, never hides it
+
+**What's broken:**
+```typescript
+toggle() {
+  this.isVisible = true;  // Always sets to true
+}
+```
+
+**What they need to do:**
+```typescript
+toggle() {
+  this.isVisible = !this.isVisible;  // Actually toggle
+}
+```
+
+**Tests:** Boolean logic, understanding toggle behavior, `*ngIf` directive
+
+**Success:** Button shows AND hides the message
 
 ---
 
 ## What to Watch For
 
-### Technical Skills
-- **Do they read documentation?** (Good sign)
-- **How do they debug?** (Console, DevTools, reading errors)
-- **Do they explain their thinking?** (Communication skills)
-- **Do they ask clarifying questions?** (Problem-solving approach)
+### ✅ **Good Signs:**
+- Tests their changes immediately
+- Uses console to check for errors (Challenge 2)
+- Explains what they're doing
+- Asks clarifying questions
+- Understands WHY, not just HOW
 
-### Red Flags
-- Copying code blindly without understanding
-- Not testing their changes
-- Ignoring error messages
-- Can't explain what operators like `switchMap` do
-
-### Green Flags
-- Tests incrementally as they code
-- Explains trade-offs (e.g., why switchMap vs mergeMap)
-- Considers edge cases (what if search is empty?)
-- Knows when to reference docs vs memory
+### ⚠️ **Concerns:**
+- Can't identify the issue without heavy hints
+- Doesn't test their changes
+- Copies code without understanding
+- Ignores console errors
+- Takes more than 5 min per challenge
 
 ---
 
-## Solutions Available
+## Discussion Questions (Last 10 min)
 
-Each component file has commented-out solutions at the bottom. Use these:
-1. To verify their approach
-2. To guide if they're stuck (give hints, not full solutions)
-3. To discuss alternative approaches at the end
+### **Basic Understanding:**
+1. "In Challenge 1, what does `(click)` do?"
+2. "What's the difference between `{{ }}` and `[ ]` in Angular?"
 
----
+### **Forms Knowledge:**
+3. "What's the difference between Reactive Forms and Template-driven Forms?"
+4. "Why did Challenge 2 show a console error?"
 
-## Discussion Questions (Last 10 minutes)
+### **Debugging:**
+5. "How do you typically debug Angular issues?"
+6. "What tools do you use? (DevTools, Angular DevTools, etc.)"
 
-After challenges, ask:
-1. **Challenge 2:** "Why did we use `switchMap` instead of `mergeMap`?"
-2. **Challenge 3:** "How would you test this form component?"
-3. **General:** "What would you refactor if you had more time?"
-4. **RxJS:** "When would you use `debounceTime` vs `throttleTime`?"
-5. **Performance:** "How would you optimize this if the search had 10,000 results?"
-
----
-
-## Time Management Tips
-
-- **10 min:** Challenge 1 (if they finish early, move on)
-- **20 min:** Challenge 2 (most important - this shows RxJS competency)
-- **15 min:** Challenge 3 (can skip if running low on time)
-- **10 min:** Discussion and questions
-
-If they're fast, ask them to:
-- Add tests for Challenge 2
-- Add a "Clear" button to Challenge 2
-- Add "Confirm Password" field to Challenge 3
+### **Real-World:**
+7. "Have you worked with Angular before? Which version?"
+8. "Tell me about a bug you fixed recently - what was the issue?"
 
 ---
 
-## Technical Notes
+## Scoring Guide
 
-- **Angular Version:** 21 (standalone components, new control flow syntax)
-- **RxJS Version:** 7.8
-- **Form Type:** Reactive Forms (not Template-driven)
-- **Testing:** Not included (can discuss approach)
+| Challenge | Pass | Concern |
+|-----------|------|---------|
+| **Challenge 1** | Fixes in < 3 min | Can't add event binding |
+| **Challenge 2** | Checks console, fixes | Doesn't know what FormGroup is |
+| **Challenge 3** | Understands toggle logic | Confused by boolean negation |
 
-The patterns used here mirror your production clt-app (Angular 12), so skills are transferable.
+**Overall:**
+- **Strong:** Completes all 3 in 15 min, explains reasoning
+- **Adequate:** Completes 2-3 with some hints
+- **Weak:** Struggles with basic concepts, needs heavy guidance
+
+---
+
+## Solutions Reference
+
+### Challenge 1:
+```typescript
+increment() { this.count++; }
+// Template: <button (click)="increment()">Add</button>
+```
+
+### Challenge 2:
+```typescript
+this.form = this.fb.group({
+  name: [''],
+  email: ['']
+});
+```
+
+### Challenge 3:
+```typescript
+toggle() {
+  this.isVisible = !this.isVisible;
+}
+```
+
+---
+
+## Tips for Interviewers
+
+1. **Let them struggle a bit** - See their problem-solving process
+2. **Watch for console usage** - Do they check for errors?
+3. **Note their communication** - Do they explain their thinking?
+4. **Give hints if stuck > 5 min** - "Check the console" or "What does toggle mean?"
+5. **Ask "why" questions** - Test understanding, not just memorization
+
+---
+
+## After the Challenges
+
+If they finish early (unlikely), ask them to:
+- Add validation to the form (email required)
+- Add a "Subtract" button to Challenge 1
+- Explain how they would test these components
+
+---
+
+## Red Flags 🚩
+
+- Completes 0-1 challenges in 15 minutes
+- Doesn't know what `(click)` or `formControlName` means
+- Can't use browser DevTools
+- Copy-pastes from Stack Overflow without understanding
+- Gets frustrated with simple bugs
+
+## Green Flags ✅
+
+- Systematic debugging approach
+- Checks console immediately on errors
+- Tests changes incrementally
+- Explains their reasoning clearly
+- Asks good clarifying questions
+- Knows when to look at documentation
+
+---
+
+**Good luck with your interview! 🎯**

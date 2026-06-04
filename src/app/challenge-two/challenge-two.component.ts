@@ -1,222 +1,150 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Subject, of } from 'rxjs';
-import { takeUntil, debounceTime, switchMap, tap, catchError } from 'rxjs/operators';
-
-import { SearchService, SearchResult } from './search.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-challenge-two',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <h2>Challenge 2: Implement RxJS Search 🔍</h2>
-    <p><strong>Requirements:</strong></p>
-    <ul>
-      <li>Implement search with 300ms debounce</li>
-      <li>Cancel previous API calls when new search starts (use switchMap)</li>
-      <li>Show loading indicator while searching</li>
-      <li>Handle errors gracefully</li>
-      <li>Properly unsubscribe on component destroy</li>
-    </ul>
+    <div class="challenge">
+      <h2>Challenge 2: Missing Form Field</h2>
+      <p class="instructions">
+        This form has a Name field and an Email field in the UI, but the Email field shows an error in the console.
+        <br><strong>Fix the form so both fields work without errors.</strong>
+      </p>
 
-    <div class="card">
-      <h3>Search Users</h3>
-
-      <input
-        type="text"
-        [formControl]="searchControl"
-        placeholder="Type to search users..."
-        class="search-input"
-      />
-
-      @if (isLoading) {
-        <div class="loading">🔄 Searching...</div>
-      }
-      @if (error) {
-        <div class="error">{{ error }}</div>
-      }
-
-      <div class="results">
-        @for (result of results; track result.id) {
-          <div class="result-item">
-            <strong>{{ result.name }}</strong> - {{ result.email }}
+      <div class="demo-area">
+        <form [formGroup]="form">
+          <div class="form-field">
+            <label>Name:</label>
+            <input formControlName="name" placeholder="Enter your name" />
           </div>
-        }
-        @if (!isLoading && results.length === 0 && searchControl.value) {
-          <div class="no-results">
-            No results found for "{{ searchControl.value }}"
+
+          <div class="form-field">
+            <label>Email:</label>
+            <input formControlName="email" placeholder="Enter your email" />
+          </div>
+
+          <button type="button" (click)="showValues()">Show Form Values</button>
+        </form>
+
+        @if (formValues) {
+          <div class="output">
+            <strong>Form Values:</strong>
+            <pre>{{ formValues }}</pre>
           </div>
         }
       </div>
-    </div>
 
-    <details class="hints">
-      <summary>💡 Hints (click to expand)</summary>
-      <ul>
-        <li>Pattern is similar to your clt-app: post-code.component.ts and condition-details.component.ts</li>
-        <li>Listen to: this.searchControl.valueChanges</li>
-        <li>Chain operators: pipe(debounceTime(300), tap(...), switchMap(...), catchError(...), takeUntil(...))</li>
-        <li>Set isLoading in tap() before switchMap</li>
-        <li>Call this.searchService.search(term) inside switchMap</li>
-        <li>Use this.destroy$ with takeUntil() to unsubscribe</li>
-        <li>Subscribe and set results + isLoading = false</li>
-      </ul>
-    </details>
+      <div class="hint">
+        💡 Check the browser console for errors. Look at what fields are defined in the FormGroup vs what's in the template.
+      </div>
+    </div>
   `,
   styles: [`
-    h2 { color: #333; }
-    ul {
-      background: #fff3cd;
-      border: 1px solid #ffc107;
-      border-radius: 4px;
-      padding: 15px 15px 15px 35px;
-      margin: 15px 0;
-    }
-    li { margin: 5px 0; }
-    .card {
+    .challenge {
       padding: 20px;
+    }
+    h2 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .instructions {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin: 15px 0;
+      line-height: 1.6;
+    }
+    .demo-area {
       background: #f9f9f9;
-      border-radius: 4px;
-      margin-top: 10px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      padding: 30px;
+      margin: 20px 0;
     }
-    h3 {
-      margin-top: 0;
-      color: #555;
+    .form-field {
+      margin-bottom: 20px;
     }
-    .search-input {
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+    input {
       width: 100%;
-      padding: 12px;
-      font-size: 16px;
+      padding: 10px;
       border: 2px solid #ddd;
       border-radius: 4px;
+      font-size: 14px;
       box-sizing: border-box;
-      transition: border-color 0.3s;
     }
-    .search-input:focus {
+    input:focus {
       outline: none;
       border-color: #007bff;
     }
-    .loading {
-      margin-top: 10px;
-      color: #007bff;
-      font-style: italic;
-      padding: 10px;
-      background: #e7f3ff;
-      border-radius: 4px;
-    }
-    .error {
-      margin-top: 10px;
-      padding: 10px;
-      background: #f8d7da;
-      border: 1px solid #f5c6cb;
-      color: #721c24;
-      border-radius: 4px;
-    }
-    .results {
-      margin-top: 20px;
-    }
-    .result-item {
-      padding: 12px;
-      background: white;
-      margin-bottom: 8px;
-      border-radius: 4px;
-      border: 1px solid #ddd;
-      transition: all 0.2s;
-    }
-    .result-item:hover {
-      border-color: #007bff;
-      box-shadow: 0 2px 4px rgba(0,123,255,0.1);
-    }
-    .no-results {
-      padding: 20px;
-      text-align: center;
-      color: #666;
-      font-style: italic;
-      background: white;
-      border-radius: 4px;
-      border: 1px dashed #ccc;
-    }
-    .hints {
-      margin-top: 30px;
-      padding: 15px;
-      background: #e7f3ff;
-      border: 1px solid #007bff;
-      border-radius: 4px;
-    }
-    .hints summary {
-      cursor: pointer;
-      font-weight: bold;
-      color: #0056b3;
-    }
-    .hints ul {
-      background: transparent;
+    button {
+      padding: 12px 30px;
+      background: #28a745;
+      color: white;
       border: none;
-      padding-left: 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #218838;
+    }
+    .output {
+      margin-top: 20px;
+      padding: 15px;
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      border-radius: 4px;
+    }
+    pre {
+      margin: 10px 0 0 0;
+      font-family: monospace;
+      color: #155724;
+    }
+    .hint {
+      background: #e7f3ff;
+      border-left: 4px solid #007bff;
+      padding: 12px;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #004085;
     }
   `]
 })
-export class ChallengeTwoComponent implements OnInit, OnDestroy {
-  searchControl = new FormControl('');
-  results: SearchResult[] = [];
-  isLoading = false;
-  error = '';
-  private destroy$ = new Subject<void>();
+export class ChallengeTwoComponent implements OnInit {
+  form!: FormGroup;
+  formValues: string = '';
 
-  constructor(private searchService: SearchService) {}
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
-    // TODO: Implement the search logic here
-    // 1. Listen to searchControl.valueChanges
-    // 2. Add debounceTime(300)
-    // 3. Use tap() to set isLoading = true and clear error
-    // 4. Use switchMap to call searchService.search(searchTerm)
-    // 5. Use catchError to handle errors
-    // 6. Use takeUntil(this.destroy$) to unsubscribe
-    // 7. Subscribe and update results + isLoading = false
-
-    // HINT: Pattern from your clt-app files:
-    // this.searchControl.valueChanges.pipe(
-    //   debounceTime(300),
-    //   tap(() => { this.isLoading = true; this.error = ''; }),
-    //   switchMap(term => this.searchService.search(term || '').pipe(
-    //     catchError(err => { ... })
-    //   )),
-    //   takeUntil(this.destroy$)
-    // ).subscribe(results => { ... });
+    this.form = this.fb.group({
+      name: ['']
+      // TODO: The email field is missing from the FormGroup
+    });
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+  showValues() {
+    this.formValues = JSON.stringify(this.form.value, null, 2);
   }
 }
 
 /* SOLUTION:
 
-ngOnInit() {
-  this.searchControl.valueChanges
-    .pipe(
-      debounceTime(300),
-      tap(() => {
-        this.isLoading = true;
-        this.error = '';
-      }),
-      switchMap(term =>
-        this.searchService.search(term || '').pipe(
-          catchError(err => {
-            this.error = 'Search failed. Please try again.';
-            this.isLoading = false;
-            return of([]);
-          })
-        )
-      ),
-      takeUntil(this.destroy$)
-    )
-    .subscribe(results => {
-      this.results = results;
-      this.isLoading = false;
-    });
-}
+In ngOnInit(), add the email field to the FormGroup:
+
+this.form = this.fb.group({
+  name: [''],
+  email: ['']
+});
 */
