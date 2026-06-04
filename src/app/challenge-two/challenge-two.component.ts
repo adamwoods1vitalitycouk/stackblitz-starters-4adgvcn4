@@ -130,7 +130,6 @@ export class ChallengeTwoComponent implements OnInit {
   ngOnInit() {
     this.form = this.fb.group({
       name: ['']
-      // TODO: The email field is missing from the FormGroup
     });
   }
 
@@ -138,13 +137,3 @@ export class ChallengeTwoComponent implements OnInit {
     this.formValues = JSON.stringify(this.form.value, null, 2);
   }
 }
-
-/* SOLUTION:
-
-In ngOnInit(), add the email field to the FormGroup:
-
-this.form = this.fb.group({
-  name: [''],
-  email: ['']
-});
-*/

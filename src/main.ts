@@ -14,7 +14,7 @@ import { ChallengeThreeComponent } from './app/challenge-three/challenge-three.c
     <div class="container">
       <header>
         <h1>Angular Technical Assessment</h1>
-        <p class="subtitle">Fix the bugs in each challenge to demonstrate your Angular skills</p>
+        <p class="subtitle">Fix the bugs in each challenge to demonstrate your Angular skills. All bugs are contained within the folder 'app > challenge-*'.</p>
       </header>
 
       <nav>

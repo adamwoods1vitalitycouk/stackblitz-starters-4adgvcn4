@@ -113,15 +113,6 @@ export class ChallengeThreeComponent {
   isVisible = false;
 
   toggle() {
-    this.isVisible = true; // BUG: This only sets it to true, never false
+    this.isVisible = true;
   }
 }
-
-/* SOLUTION:
-
-Fix the toggle() method to actually toggle:
-
-toggle() {
-  this.isVisible = !this.isVisible;
-}
-*/

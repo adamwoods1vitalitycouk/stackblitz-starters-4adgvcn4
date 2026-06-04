@@ -78,17 +78,5 @@ import { CommonModule } from '@angular/common';
 export class ChallengeOneComponent {
   count = 0;
 
-  // TODO: Add a method to increment the count
-  // TODO: Wire up the button to call this method
+  // TODO: Add a method to increment the count.
 }
-
-/* SOLUTION:
-
-1. Add method:
-increment() {
-  this.count++;
-}
-
-2. Update button in template:
-<button (click)="increment()">Add</button>
-*/
