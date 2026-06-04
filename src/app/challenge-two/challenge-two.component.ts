@@ -37,8 +37,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
         }
       </div>
 
-      <div class="hint">
-        💡 Check the browser console for errors. Look at what fields are defined in the FormGroup vs what's in the template.
+      <div class="hint-link">
+        💡 Stuck? Open <code>src/app/challenge-two/HINT.md</code> for debugging tips
       </div>
     </div>
   `,
@@ -111,13 +111,20 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
       font-family: monospace;
       color: #155724;
     }
-    .hint {
+    .hint-link {
       background: #e7f3ff;
       border-left: 4px solid #007bff;
       padding: 12px;
       margin-top: 20px;
       font-size: 14px;
       color: #004085;
+      text-align: center;
+    }
+    .hint-link code {
+      background: rgba(0,0,0,0.1);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
     }
   `]
 })

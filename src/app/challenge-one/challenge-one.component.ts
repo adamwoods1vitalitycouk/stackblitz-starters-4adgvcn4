@@ -18,8 +18,8 @@ import { CommonModule } from '@angular/common';
         <p class="count-display">Current count: {{ count }}</p>
       </div>
 
-      <div class="hint">
-        💡 Check: Is the button wired to a method? Does that method exist?
+      <div class="hint-link">
+        💡 Need help? Open <code>src/app/challenge-one/HINT.md</code> for guidance
       </div>
     </div>
   `,
@@ -65,13 +65,20 @@ import { CommonModule } from '@angular/common';
       color: #333;
       margin-top: 20px;
     }
-    .hint {
+    .hint-link {
       background: #e7f3ff;
       border-left: 4px solid #007bff;
       padding: 12px;
       margin-top: 20px;
       font-size: 14px;
       color: #004085;
+      text-align: center;
+    }
+    .hint-link code {
+      background: rgba(0,0,0,0.1);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
     }
   `]
 })

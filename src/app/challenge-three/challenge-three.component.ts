@@ -25,8 +25,8 @@ import { CommonModule } from '@angular/common';
         </div>
       </div>
 
-      <div class="hint">
-        💡 Check the toggle() method. What should happen when you toggle something?
+      <div class="hint-link">
+        💡 Need a hint? Check <code>src/app/challenge-three/HINT.md</code>
       </div>
     </div>
   `,
@@ -99,13 +99,20 @@ import { CommonModule } from '@angular/common';
     .status strong {
       color: #007bff;
     }
-    .hint {
+    .hint-link {
       background: #e7f3ff;
       border-left: 4px solid #007bff;
       padding: 12px;
       margin-top: 20px;
       font-size: 14px;
       color: #004085;
+      text-align: center;
+    }
+    .hint-link code {
+      background: rgba(0,0,0,0.1);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
     }
   `]
 })
