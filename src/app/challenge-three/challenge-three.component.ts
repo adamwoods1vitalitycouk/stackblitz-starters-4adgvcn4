@@ -25,8 +25,22 @@ import { CommonModule } from '@angular/common';
         </div>
       </div>
 
-      <div class="hint-link">
-        💡 Need a hint? Check <code>src/app/challenge-three/HINT.md</code>
+      <div class="hints-section">
+        <button class="hint-button" (click)="showNextHint()">
+          {{ getHintButtonText() }}
+        </button>
+
+        @if (currentHintLevel > 0) {
+          <div class="hint-box">
+            @for (hint of getVisibleHints(); track $index) {
+              <p class="hint-text">💡 {{ hint }}</p>
+            }
+          </div>
+        }
+
+        <p class="hint-file-link">
+          Or open <code>src/app/challenge-three/HINT.md</code> to see all hints
+        </p>
       </div>
     </div>
   `,
@@ -99,16 +113,48 @@ import { CommonModule } from '@angular/common';
     .status strong {
       color: #007bff;
     }
-    .hint-link {
+    .hints-section {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 2px dashed #ccc;
+    }
+    .hint-button {
+      padding: 10px 20px;
+      background: #ffc107;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    .hint-button:hover {
+      background: #e0a800;
+      transform: translateY(-2px);
+    }
+    .hint-box {
+      margin-top: 15px;
+      padding: 15px;
       background: #e7f3ff;
       border-left: 4px solid #007bff;
-      padding: 12px;
-      margin-top: 20px;
+      border-radius: 4px;
+    }
+    .hint-text {
+      margin: 10px 0;
       font-size: 14px;
       color: #004085;
+      line-height: 1.6;
+    }
+    .hint-file-link {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #666;
       text-align: center;
     }
-    .hint-link code {
+    .hint-file-link code {
       background: rgba(0,0,0,0.1);
       padding: 2px 6px;
       border-radius: 3px;
@@ -118,8 +164,31 @@ import { CommonModule } from '@angular/common';
 })
 export class ChallengeThreeComponent {
   isVisible = false;
+  currentHintLevel = 0;
+
+  private hints = [
+    'What does "toggle" mean? It should switch between two states (on/off, true/false).',
+    'Look at the toggle() method. Does it actually toggle, or does it always set to the same value?',
+    'Use the ! operator to flip the boolean: this.isVisible = !this.isVisible instead of always setting it to true.'
+  ];
 
   toggle() {
     this.isVisible = true;
+  }
+
+  showNextHint() {
+    if (this.currentHintLevel < this.hints.length) {
+      this.currentHintLevel++;
+    }
+  }
+
+  getVisibleHints(): string[] {
+    return this.hints.slice(0, this.currentHintLevel);
+  }
+
+  getHintButtonText(): string {
+    if (this.currentHintLevel === 0) return '💡 Get Hint';
+    if (this.currentHintLevel < this.hints.length) return '💡 Get Another Hint';
+    return '💡 No More Hints';
   }
 }
